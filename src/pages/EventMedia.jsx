@@ -23,19 +23,23 @@ const EventMedia = () => {
   }, []);
 
   const fetchMedia = async () => {
-    // API placeholder
     try {
-      // const response = await fetch('/api/media');
-      const mockMedia = [
-        { id: 1, type: 'image', url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400', eventId: 1, eventName: 'Annual Gala 2024' },
-        { id: 2, type: 'image', url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400', eventId: 1, eventName: 'Annual Gala 2024' },
-        { id: 3, type: 'image', url: 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=400', eventId: 2, eventName: 'Product Launch' },
-        { id: 4, type: 'image', url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400', eventId: 2, eventName: 'Product Launch' },
-        { id: 5, type: 'image', url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400', eventId: 3, eventName: 'Team Building' },
-        { id: 6, type: 'image', url: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400', eventId: 3, eventName: 'Team Building' },
-      ];
-      
-      setMedia(mockMedia);
+      // Use API helper which handles auth
+      const response = await authenticatedFetch('events/media/');
+      if (!response.ok) throw new Error('Failed to fetch media');
+      const apiData = await response.json();
+      // Adapt API response into current mockMedia shape if needed
+      // Assume the API returns data.data as array, each with id, type, url, eventId, eventName
+      const rawMedia = Array.isArray(apiData.data) ? apiData.data : (apiData.data || []);
+      // If backend has a different field mapping, correct it here
+      const mappedMedia = rawMedia.map(item => ({
+        id: item.id,
+        type: item.type, // 'image', maybe 'video' in the future
+        url: item.url,
+        eventId: item.eventId, // Might need item.event_id
+        eventName: item.eventName // Might need item.event_name
+      }));
+      setMedia(mappedMedia);
     } catch (error) {
       toast({
         title: t('error'),
@@ -45,9 +49,10 @@ const EventMedia = () => {
     }
   };
 
+
   const handleUpload = () => {
     toast({
-      description: '🚧 This feature isn\'t implemented yet—but don\'t worry! You can request it in your next prompt! 🚀',
+      description: '🚧 This feature will be implemented soon! 🚀',
     });
   };
 
