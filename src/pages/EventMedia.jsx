@@ -12,22 +12,29 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { authenticatedFetch } from '@/lib/api';
 
 const EventMedia = () => {
+  console.log("🎬 [EventMedia] Component rendered/re-rendered");
   const { t } = useLanguage();
   const [media, setMedia] = useState([]);
   const [selectedMedia, setSelectedMedia] = useState(null);
 
   useEffect(() => {
+    console.log("🔄 [EventMedia] useEffect triggered - about to call fetchMedia");
     fetchMedia();
   }, []);
 
   const fetchMedia = async () => {
+    console.log("📡 [fetchMedia] Function called - starting fetch");
     try {
       // Use API helper which handles auth
+      console.log("im here !!!");
       const response = await authenticatedFetch('events/media/');
-      if (!response.ok) throw new Error('Failed to fetch media');
+      console.log('[Media Fetch] Status:', response.status, response.ok);
       const apiData = await response.json();
+      console.log('[Media Fetch] Data:', apiData);
+      if (!response.ok) throw new Error('Failed to fetch media');
       // Adapt API response into current mockMedia shape if needed
       // Assume the API returns data.data as array, each with id, type, url, eventId, eventName
       const rawMedia = Array.isArray(apiData.data) ? apiData.data : (apiData.data || []);
@@ -60,9 +67,9 @@ const EventMedia = () => {
     // API placeholder
     try {
       // await fetch(`/api/media/${mediaId}`, { method: 'DELETE' });
-      
+
       setMedia(media.filter((item) => item.id !== mediaId));
-      
+
       toast({
         title: t('success'),
         description: t('mediaDeleted'),
