@@ -93,6 +93,7 @@ const Register = () => {
     };
 
     // API placeholder for registration
+    console.log('About to send registration request...');
     try {
       const response = await fetch('https://backend.ricefield-dev.cloud/api/v1/auth/register/', {
         method: 'POST',
@@ -100,6 +101,8 @@ const Register = () => {
         body: JSON.stringify(payload),
       });
       
+      console.log('Response received:', response.status, response.statusText);
+
       // Simulate API call delay
       // await new Promise(resolve => setTimeout(resolve, 1000));
       
