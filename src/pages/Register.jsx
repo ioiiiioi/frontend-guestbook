@@ -94,7 +94,7 @@ const Register = () => {
 
     // API placeholder for registration
     try {
-      const response = await fetch('https://backend.ricefield-dev.cloud/api/v1/auth/register', {
+      const response = await fetch('https://backend.ricefield-dev.cloud/api/v1/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
