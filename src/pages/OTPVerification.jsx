@@ -68,14 +68,22 @@ const OTPVerification = () => {
         body: JSON.stringify({ email, otp: otpCode }),
       });
 
-      toast({
-        title: t('success'),
-        description: t('otpVerified'),
-      });
+      if (response.ok) {
+        toast({
+          title: t('success'),
+          description: t('otpVerified'),
+        });
 
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+      } else {
+        toast({
+          title: t('error'),
+          description: t('invalidOTP'),
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       toast({
         title: t('error'),
@@ -90,20 +98,28 @@ const OTPVerification = () => {
 
     // API placeholder for resending OTP
     try {
-      await fetch('https://backend.ricefield-dev.cloud/api/v1/auth/verify-email/', {
+      const response = await fetch('https://backend.ricefield-dev.cloud/api/v1/auth/resend-otp/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
-      toast({
-        title: t('success'),
-        description: t('otpResent'),
-      });
+      if (response.ok) {
+        toast({
+          title: t('success'),
+          description: t('otpResent'),
+        });
 
-      setTimer(60);
-      setCanResend(false);
-      setOtp(['', '', '', '', '', '']);
+        setTimer(60);
+        setCanResend(false);
+        setOtp(['', '', '', '', '', '']);
+      } else {
+        toast({
+          title: t('error'),
+          description: t('resendFailed'),
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       toast({
         title: t('error'),

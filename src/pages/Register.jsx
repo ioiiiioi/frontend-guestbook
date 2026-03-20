@@ -92,27 +92,33 @@ const Register = () => {
       }
     };
 
-    console.log('Registration Payload:', payload);
-
     // API placeholder for registration
     try {
-      // const response = await fetch('https://backend.ricefield-dev.cloud/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(payload),
-      // });
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: t('success'),
-        description: t('registrationSuccess'),
+      const response = await fetch('https://backend.ricefield-dev.cloud/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
       
-      setTimeout(() => {
-        navigate('/verify-otp', { state: { email: formData.email } });
-      }, 1500);
+      // Simulate API call delay
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (response.ok) {
+        toast({
+          title: t('success'),
+          description: t('registrationSuccess'),
+        });
+
+        setTimeout(() => {
+          navigate('/verify-otp', { state: { email: formData.email } });
+        }, 1500);
+      } else {
+        toast({
+          title: t('error'),
+          description: t('registrationFailed'),
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       toast({
         title: t('error'),
